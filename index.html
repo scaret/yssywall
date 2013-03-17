@@ -1,0 +1,170 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>饮水思源涂鸦墙</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+	    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+	<script src="js/underscore.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/yssywall.js"></script>
+
+  </head>
+
+  <body>
+  
+	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          
+          <span class="brand" color="white">饮水思源涂鸦墙</span>
+		  
+	<span style="float:right;margin-top:0px;"><a href="#" onclick="showUsage()" class="btn btn-inverse">提示</a></span>
+	<span style="float:right;margin-top:0px;"><a href="#" onclick="clear()" class="btn btn-inverse">清除</a></span>
+          <span style="float:right;margin-top:0px;"><a data-toggle="modal" href="#myModal" class="btn btn-inverse">设置</a></span>
+		<span style="float:right;margin-top:0px;"><a href="#" onclick="stop()" class="btn btn-inverse">暂停</a></span>
+	<span style="float:right;margin-top:0px;"><a href="#" onclick="start()" class="btn btn-inverse">开始</a></span>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+		<div class="row-fluid" id="main">
+
+            </div><!--/span-->
+          </div>
+    </div> <!-- /container -->
+  
+  <!-- modal-->
+  
+   <div id="myModal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal" >&times;</a>
+              <h3>水源墙设置</h3>
+            </div>
+            <div class="modal-body">
+              <h4>板面</h4> <input type="text" value="juhui" id="boardName"></input>
+              <h4>标记</h4> <input type="text" value="G" id="mark"></input>
+              <h4>起始页</h4> <input type="text" value="400" id="page"></input>
+              <h4>板面刷新频率(毫秒)</h4> <input type="text" value="5000" id="boardFrequency"></input>
+              <h4>墙面刷新频率(毫秒)</h4> <input type="text" value="1000" id="wallFrequency"></input>
+			  <h4>侦测板面数量</h4> <input type="text" value="5" id="pageNumber"></input>
+              <h4>最大显示数量</h4> <input type="text" value="4" id="tips_number"></input>
+              <h4>特权渲染ID</h4> <input type="text" value="Juhui" id="superman"></input>
+             
+            </div>
+            <div class="modal-footer">
+              <a href="#myModal" class="btn" data-toggle="modal" >取消</a>
+              <a data-toggle="modal" href="#myModal" class="btn btn-primary" id="config">确定</a>
+            </div>
+          </div>
+  
+  
+  <!-- // modal-->
+  
+  
+  
+  
+  
+  
+  <!-- templates -->
+
+  <script type="text/template" id="topic-template">
+
+	<div id="<%= file_id%>" class="article topic">
+		<a class="return">-</a>
+		<a class="close">×</a>
+
+		<div class="simpleheader alert <%= alertType%>">
+			 <a class="open">+</a>
+			 <a class="close">×</a>
+			 <div class="s_author"><%= content.author %>(<%= content.nick %>): </div>
+			 <div class="s_title">&nbsp;<b> <%= content.title %> </b></div>
+			 <div class="s_abstract"><%= content.text_lines[0] || content.text_lines[1]||content.title%></div>
+		</div>
+		<div class="header">
+			<div class="author">
+				<%= content.author %>	(<%= content.nick %>):
+					</div>
+			<div class="title">
+				标题: <%= content.title%>
+			</div>
+		</div>
+		<hr/><p>				
+		<div class="content">
+			<%= content.text_lines.join("<br/>")%>
+
+		</div>
+		<div class="replies"></div>	
+
+	</div>
+  </script>
+  
+  <script type="text/template" id="reply-template">
+	<div id="<%= file_id%>" class="article reply" data-reid="<%= reid%>">
+		<h4 class="author">
+			<%= content.author %>	(<%= content.nick %>):
+		</h4>
+		<div class="content">
+			<%= content.text_lines.join("<br/>")%>
+			
+		</div>
+	</div>
+  </script>
+  
+
+
+<!-- template-->
+<script>
+$(function(){
+	
+	$(".close").on("click",function(){start();$(this).parents(".topic").slideUp("slow",function(){$(this).remove();});$(".topic").removeClass("unseen");});
+	$(".open").on("click",function(){
+		stop();
+		$(".topic").addClass("unseen");
+		$(this).parents(".topic").removeClass("unseen").addClass("topic_active").hide().slideDown();
+	});
+	$(".return").on("click",function(){
+		start();
+		$(".topic").removeClass("unseen").removeClass("topic_active").hide().show("slow");
+	});
+	$("#config").click(function(){
+		config.load_interval = parseInt($("#boardFrequency").val());
+		config.wall_interval = parseInt($("#wallFrequency").val());
+		config.pageNumber = parseInt($("#pageNumber").val());
+		config.tips_number = parseInt($("#tips_number").val());
+		config.superman = $("#superman").val().split(" ");
+		config.board = $("#boardName").val().split(" ")[0];
+		config.mark = $("#mark").val()[0];
+		config.init_page = parseInt($("#page").val());
+		start();
+		
+	});
+	
+});
+</script>
+
+  </body>
+</html>
