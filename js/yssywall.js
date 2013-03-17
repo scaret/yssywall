@@ -1,8 +1,8 @@
 ﻿/************************************
-* app name:					yssywall饮水思源涂鸦墙
-* Designed by: 		scaret@bbs.sjtu.edu.cn
-* last edit:		2012-4-18
-* version:			1.0
+* app name:         yssywall饮水思源涂鸦墙
+* author:           i@scaret.in
+* last edit:        2013-3-17
+* version:          2.0
 ************************************/
 var config={
 	board:"juhui",
@@ -142,3 +142,13 @@ function showUsage(){
 		}
 	}]);
 }
+
+function postsController($scope){
+	$scope.posts=[
+		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
+		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
+		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
+	];
+}
+
+
