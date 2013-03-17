@@ -1,64 +1,58 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <title>饮水思源涂鸦墙</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<!--bootstrap是一个很著名的前端UI框架，帮助前端开发者很快能够应用漂亮的组件。 -->
+    <link href="css/bootstrap.css" rel="stylesheet">
 	
-	    <script src="js/jquery.js"></script>
+	<!--几乎所有的css都会写在style.css里。事实上可以预期，其中充满了不需要的css规则。-->
+	<link href="css/style.css" rel="stylesheet">
+	
+	<!--理论上所有的JS文件应该放在HTML文件末端以加快网页加载速度，但水源墙应用场景非常特殊。我们有很多时间来加载
+		它，然而我们绝不能容忍它看起来加载了，但是又没有立刻开始工作。所有的库都是用min版本。-->
+	<!--以下是AngularJS，一个基于MVC的，封装DOM操作的非常好用的前端库。作者一开始不大喜欢它，但是发现一个来自波兰的
+	前端白痴在很容易地使用它，所以惊讶于它平滑的学习曲线，所以打算找一个项目来试试。事实上这就是我更新水源墙到版本2的理由。-->
+	<script src="js/angular.js"></script>
+	<!--事实上作者希望在版本2摆脱jQuery的依赖（转而使用AngularJS），但是。。。总之先放着吧-->
+	<script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
+	<!--underscore是一个很有用的JavaScript功能扩充库-->
 	<script src="js/underscore.js"></script>
+	<!--api.js封装了几个获取水源板面数据的接口。API由fcfarseer@yssy提供-->
 	<script src="js/api.js"></script>
+	<!--其他的JavaScript写在这里-->
 	<script src="js/yssywall.js"></script>
 
   </head>
 
   <body>
-  
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          
-          <span class="brand" color="white">饮水思源涂鸦墙</span>
+          <span class="brand" id="brand">饮水思源涂鸦墙</span>
 		  
-	<span style="float:right;margin-top:0px;"><a href="#" onclick="showUsage()" class="btn btn-inverse">提示</a></span>
-	<span style="float:right;margin-top:0px;"><a href="#" onclick="clear()" class="btn btn-inverse">清除</a></span>
-          <span style="float:right;margin-top:0px;"><a data-toggle="modal" href="#myModal" class="btn btn-inverse">设置</a></span>
-		<span style="float:right;margin-top:0px;"><a href="#" onclick="stop()" class="btn btn-inverse">暂停</a></span>
-	<span style="float:right;margin-top:0px;"><a href="#" onclick="start()" class="btn btn-inverse">开始</a></span>
-
-
-
-        </div>
-      </div>
-    </div>
+			<div class="pull-right nav-buttons">
+				<a href="#" onclick="start();return false;" class="btn btn-inverse">开始</a>
+				<a href="#" onclick="stop();return false;" class="btn btn-inverse">暂停</a>
+				<a data-toggle="modal" href="#myModal" class="btn btn-inverse">设置</a>
+				<a href="#" onclick="clear();return false;" class="btn btn-inverse">清除</a>
+				<a href="#" onclick="showUsage();return false;" class="btn btn-inverse">提示</a>		
+			</div><!--end of nav-buttons-->
+        </div><!--end of container -->
+      </div><!--end of navbar-inner-->
+    </div><!-- end of navbar -->
 
 
     <div class="container">
+	
+		<!--墙主体部分。稍后会自动填充-->
 		<div class="row-fluid" id="main">
-
-            </div><!--/span-->
-          </div>
-    </div> <!-- /container -->
+		</div><!--end of main-->
+    </div> <!--end of container -->
   
-  <!-- modal-->
-  
+  <!--设置按钮的选项列表-->
    <div id="myModal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal" >&times;</a>
@@ -79,18 +73,9 @@
               <a href="#myModal" class="btn" data-toggle="modal" >取消</a>
               <a data-toggle="modal" href="#myModal" class="btn btn-primary" id="config">确定</a>
             </div>
-          </div>
-  
-  
-  <!-- // modal-->
-  
-  
-  
-  
-  
-  
-  <!-- templates -->
-
+          </div><!--end of modal-->
+		  
+  <!--以下是版本1的前段工作模板。模板系统是underscore.js所提供的。工作的很好。但是因为要迁移到AngularJS所以之后会删除-->
   <script type="text/template" id="topic-template">
 
 	<div id="<%= file_id%>" class="article topic">
@@ -132,14 +117,10 @@
 			
 		</div>
 	</div>
-  </script>
+  </script><!--end of templates-->
   
-
-
-<!-- template-->
 <script>
 $(function(){
-	
 	$(".close").on("click",function(){start();$(this).parents(".topic").slideUp("slow",function(){$(this).remove();});$(".topic").removeClass("unseen");});
 	$(".open").on("click",function(){
 		stop();
@@ -160,11 +141,9 @@ $(function(){
 		config.mark = $("#mark").val()[0];
 		config.init_page = parseInt($("#page").val());
 		start();
-		
 	});
-	
 });
 </script>
 
-  </body>
+</body>
 </html>
