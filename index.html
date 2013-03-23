@@ -15,11 +15,6 @@
 	<!--以下是AngularJS，一个基于MVC的，封装DOM操作的非常好用的前端库。作者一开始不大喜欢它，但是发现一个来自波兰的
 	前端白痴在很容易地使用它，所以惊讶于它平滑的学习曲线，所以打算找一个项目来试试。事实上这就是我更新水源墙到版本2的理由。-->
 	<script src="js/angular.js"></script>
-	<!--事实上作者希望在版本2摆脱jQuery的依赖（转而使用AngularJS），但是。。。总之先放着吧-->
-	<script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-	<!--underscore是一个很有用的JavaScript功能扩充库-->
-	<script src="js/underscore.js"></script>
 	<!--api.js封装了几个获取水源板面数据的接口。API由fcfarseer@yssy提供-->
 	<script src="js/api.js"></script>
 	<!--其他的JavaScript写在这里-->
@@ -32,14 +27,6 @@
       <div class="navbar-inner">
         <div class="container">
           <span class="brand" id="brand">饮水思源涂鸦墙</span>
-		  
-			<div class="pull-right nav-buttons">
-				<a href="#" onclick="start();return false;" class="btn btn-inverse">开始</a>
-				<a href="#" onclick="stop();return false;" class="btn btn-inverse">暂停</a>
-				<a data-toggle="modal" href="#myModal" class="btn btn-inverse">设置</a>
-				<a href="#" onclick="clear();return false;" class="btn btn-inverse">清除</a>
-				<a href="#" onclick="showUsage();return false;" class="btn btn-inverse">提示</a>		
-			</div><!--end of nav-buttons-->
         </div><!--end of container -->
       </div><!--end of navbar-inner-->
     </div><!-- end of navbar -->
@@ -60,101 +47,6 @@
 		</div><!--end of main-->
     </div> <!--end of container -->
   
-  <!--设置按钮的选项列表-->
-   <div id="myModal" class="modal hide fade">
-            <div class="modal-header">
-              <a class="close" data-dismiss="modal" >&times;</a>
-              <h3>水源墙设置</h3>
-            </div>
-            <div class="modal-body">
-              <h4>板面</h4> <input type="text" value="juhui" id="boardName"></input>
-              <h4>标记</h4> <input type="text" value="G" id="mark"></input>
-              <h4>起始页</h4> <input type="text" value="400" id="page"></input>
-              <h4>板面刷新频率(毫秒)</h4> <input type="text" value="5000" id="boardFrequency"></input>
-              <h4>墙面刷新频率(毫秒)</h4> <input type="text" value="1000" id="wallFrequency"></input>
-			  <h4>侦测板面数量</h4> <input type="text" value="5" id="pageNumber"></input>
-              <h4>最大显示数量</h4> <input type="text" value="4" id="tips_number"></input>
-              <h4>特权渲染ID</h4> <input type="text" value="Juhui" id="superman"></input>
-             
-            </div>
-            <div class="modal-footer">
-              <a href="#myModal" class="btn" data-toggle="modal" >取消</a>
-              <a data-toggle="modal" href="#myModal" class="btn btn-primary" id="config">确定</a>
-            </div>
-          </div><!--end of modal-->
-		  
-  <!--以下是版本1的前段工作模板。模板系统是underscore.js所提供的。工作的很好。但是因为要迁移到AngularJS所以之后会删除-->
-  <script type="text/template" id="topic-template">
-
-	<div id="<%= file_id%>" class="article topic">
-		<a class="return">-</a>
-		<a class="close">×</a>
-
-		<div class="simpleheader alert <%= alertType%>">
-			 <a class="open">+</a>
-			 <a class="close">×</a>
-			 <div class="s_author"><%= content.author %>(<%= content.nick %>): </div>
-			 <div class="s_title">&nbsp;<b> <%= content.title %> </b></div>
-			 <div class="s_abstract"><%= content.text_lines[0] || content.text_lines[1]||content.title%></div>
-		</div>
-		<div class="header">
-			<div class="author">
-				<%= content.author %>	(<%= content.nick %>):
-					</div>
-			<div class="title">
-				标题: <%= content.title%>
-			</div>
-		</div>
-		<hr/><p>				
-		<div class="content">
-			<%= content.text_lines.join("<br/>")%>
-
-		</div>
-		<div class="replies"></div>	
-
-	</div>
-  </script>
-  
-  <script type="text/template" id="reply-template">
-	<div id="<%= file_id%>" class="article reply" data-reid="<%= reid%>">
-		<h4 class="author">
-			<%= content.author %>	(<%= content.nick %>):
-		</h4>
-		<div class="content">
-			<%= content.text_lines.join("<br/>")%>
-			
-		</div>
-	</div>
-  </script><!--end of templates-->
-  
-<script>
-v1init = function(){
-	$(".close").on("click",function(){start();$(this).parents(".topic").slideUp("slow",function(){$(this).remove();});$(".topic").removeClass("unseen");});
-	$(".open").on("click",function(){
-		stop();
-		$(".topic").addClass("unseen");
-		$(this).parents(".topic").removeClass("unseen").addClass("topic_active").hide().slideDown();
-	});
-	$(".return").on("click",function(){
-		start();
-		$(".topic").removeClass("unseen").removeClass("topic_active").hide().show("slow");
-	});
-	$("#config").click(function(){
-		config.load_interval = parseInt($("#boardFrequency").val());
-		config.wall_interval = parseInt($("#wallFrequency").val());
-		config.pageNumber = parseInt($("#pageNumber").val());
-		config.tips_number = parseInt($("#tips_number").val());
-		config.superman = $("#superman").val().split(" ");
-		config.board = $("#boardName").val().split(" ")[0];
-		config.mark = $("#mark").val()[0];
-		config.init_page = parseInt($("#page").val());
-		start();
-	});
-};
-//$(v1init);
-
-
-</script>
 
 </body>
 </html>
