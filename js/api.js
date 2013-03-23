@@ -1,8 +1,8 @@
 /************************************
 * name:				ÒûË®Ë¼Ô´api
 * Designed by: 		scaret@bbs.sjtu.edu.cn
-* last edit:		2012-4-18
-* version:			0.1
+* last edit:		2013-3-23
+* version:			0.2
 ************************************/
 var api={
 	article:function(board,file,pretty){
