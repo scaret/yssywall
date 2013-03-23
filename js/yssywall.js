@@ -143,12 +143,16 @@ function showUsage(){
 	}]);
 }
 
-function postsController($scope){
-	$scope.posts=[
-		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
-		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
-		{author:"scaret",content:"Hello,world!",title:"Hello Title!"},
-	];
+function postsController($scope,$http){
+	$scope.posts=[];
+	$http.get('https://bbs.sjtu.edu.cn/api/board?board=juhui&page=635&pretty=1&include=0').success(function(data) {
+		for(var i = 0 ; i < data.articles.length ; i++)
+		$scope.posts.push({
+			author:data["articles"][i]["author"],
+			title:data["articles"][i]["link"],
+			content:data["articles"][i]["title"]
+		});
+	});
 }
 
 
