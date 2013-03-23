@@ -16,7 +16,7 @@ function postsController($scope,$http,$timeout){
 				if(data["articles"][i]["mark"] != "   "){
 					$scope.postsToShow.push({
 						author:data["articles"][i]["author"],
-						title:data["articles"][i]["link"],
+						title:data["articles"][i]["title"],
 						content:data["articles"][i]["title"],
 						mark:data["articles"][i]["mark"] != "   ",
 						page:data["page"]
