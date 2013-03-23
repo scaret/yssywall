@@ -42,25 +42,32 @@ function loadBoard(board,page){
 
 
 function postsController($scope,$http,$timeout){
-	$scope.posts=[];
-	var page = 500;
-	(function tick() {
-        $http.get(api.board("juhui",page)).success(function (data) {
-		for(var i = 0 ; i < data.articles.length ; i++){
-			if(data["articles"][i]["mark"] != "   "){
-				$scope.posts.push({
-					author:data["articles"][i]["author"],
-					title:data["articles"][i]["link"],
-					content:data["articles"][i]["title"]
-				});
-				while($scope.posts.length > 5) $scope.posts.shift();
-			}
-		} 	
-        $timeout(tick, 5000);
+	$scope.postsShown=[];
+	$scope.postsShowing = [];
+	$scope.postsToShow = [];
+	$scope.currentPage = 500;
+	(function getPostsToShow() {
+        $http.get(api.board("juhui",$scope.currentPage)).success(function (data) {
+			for(var i = 0 ; i < data.articles.length ; i++){
+				if(data["articles"][i]["mark"] != "   "){
+					$scope.postsToShow.push({
+						author:data["articles"][i]["author"],
+						title:data["articles"][i]["link"],
+						content:data["articles"][i]["title"],
+						mark:data["articles"][i]["mark"] != "   ",
+						page:data["page"]
+					});
+				}
+			} 	
+			$timeout(getPostsToShow, 5000);
         });
-	page +=1;
+		page +=1;
     })();
-	
+	(function updatePostsShowing() {
+		if($scope.postsToShow.length > 0){
+			$scope.postsShowing.push($scope.postsToShow.shift());
+		}
+		while($scope.postsShowing.length > 5) $scope.postsShown.push($scope.postsShowing.shift());
+		$timeout(updatePostsShowing, 1000);
+    })();
 }
-
-

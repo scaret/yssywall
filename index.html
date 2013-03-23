@@ -49,7 +49,7 @@
 	
 		<!--墙主体部分。稍后会自动填充-->
 		<div class="row-fluid" id="main" ng-controller="postsController">
-			<div class="simpleheader alert alert-info"  ng-repeat="post in posts">
+			<div class="simpleheader alert alert-info"  ng-repeat="post in postsShowing">
 				 <a class="open">+</a>
 				 <a class="close">×</a>
 				 <div class="s_author">{{post.author}}</div>
