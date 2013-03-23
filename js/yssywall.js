@@ -25,7 +25,7 @@ function postsController($scope,$http,$timeout){
 			} 	
 			$timeout(getPostsToShow, 5000);
         });
-		page +=1;
+		$scope.currentPage +=1;
     })();
 	(function updatePostsShowing() {
 		if($scope.postsToShow.length > 0){
