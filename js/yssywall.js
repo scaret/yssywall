@@ -46,13 +46,15 @@ function postsController($scope,$http,$timeout){
 	var page = 500;
 	(function tick() {
         $http.get(api.board("juhui",page)).success(function (data) {
-		$scope.posts = [];
 		for(var i = 0 ; i < data.articles.length ; i++){
-			$scope.posts.push({
-				author:data["articles"][i]["author"],
-				title:data["articles"][i]["link"],
-				content:data["articles"][i]["title"]
-			});
+			if(data["articles"][i]["mark"] != "   "){
+				$scope.posts.push({
+					author:data["articles"][i]["author"],
+					title:data["articles"][i]["link"],
+					content:data["articles"][i]["title"]
+				});
+				while($scope.posts.length > 5) $scope.posts.shift();
+			}
 		} 	
         $timeout(tick, 5000);
         });
