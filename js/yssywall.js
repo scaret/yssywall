@@ -145,7 +145,7 @@ function showUsage(){
 
 function postsController($scope,$http){
 	$scope.posts=[];
-	$http.get('https://bbs.sjtu.edu.cn/api/board?board=juhui&page=635&pretty=1&include=0').success(function(data) {
+	$http.get(api.board("juhui",1)).success(function(data) {
 		for(var i = 0 ; i < data.articles.length ; i++)
 		$scope.posts.push({
 			author:data["articles"][i]["author"],
