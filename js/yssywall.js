@@ -29,7 +29,21 @@ function postsController($scope,$http,$timeout){
 	$scope.untractedPosts = [];
 	$scope.currentPage = 500;
 	$scope.lastFileId = 0;
+	$scope.auto = "自动中";
 	
+	$scope.toAuto = function(){
+		$scope.auto = "自动中";
+		AUTO_SCROLL_FLAG = true;
+		clearInterval(AUTO_SCROLL_FLAG_LOCK);		
+	}
+	$scope.toManual = function(){
+		$scope.auto = "手动中";
+		AUTO_SCROLL_FLAG = false;
+		clearInterval(AUTO_SCROLL_FLAG_LOCK);		
+	}
+	$scope.toggleAuto = function(){
+		(AUTO_SCROLL_FLAG?$scope.toManual:$scope.toAuto).call($scope);
+	};
 	$scope.prev = function(){
 			if($scope.postsShown != 0){
 				$scope.postsShowing.unshift($scope.postsShown.pop());
