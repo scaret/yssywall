@@ -4,12 +4,21 @@
 * last edit:        2013-03-23
 * version:          2.0
 ************************************/
+
+var AUTO_SCROLL_FLAG = true;
+var AUTO_SCROLL_FLAG_LOCK = 0;
+var AUTO_SCROLL_FREQUENCY = 2000;
+var POST_SHOWING_CNT = 3;
 function filterTag(text){
 	  if (text) {
 		return text.
 		replace(/<[\w\W]+?>/g,'');
 	  }
 	  return '';
+}
+function toggleAutoScroll{
+	clearInterval(AUTO_SCROLL_FLAG_LOCK);
+	AUTO_SCROLL_FLAG = !AUTO_SCROLL_FLAG;
 }
 
 function postsController($scope,$http,$timeout){
@@ -19,6 +28,32 @@ function postsController($scope,$http,$timeout){
 	$scope.untractedPosts = [];
 	$scope.currentPage = 500;
 	$scope.lastFileId = 0;
+	
+	$scope.prev = function(){
+			if($scope.postsShown != 0){
+				$scope.postsShowing.unshift($scope.postsShown.pop());
+				while($scope.postsShowing.length > POST_SHOWING_CNT )
+					 $scope.postsToShow.unshift($scope.postsShowing.pop());
+				if(AUTO_SCROLL_FLAG == true){
+					AUTO_SCROLL_FLAG = false;
+					clearInterval(AUTO_SCROLL_FLAG_LOCK);
+					AUTO_SCROLL_FLAG_LOCK = setTimeout(function(){AUTO_SCROLL_FLAG = true},5000);
+				}
+			} 
+	};// end of prev
+
+	$scope.next = function(){
+			if($scope.postsToShow != 0){
+				$scope.postsShowing.push($scope.postsToShow.shift());
+				while($scope.postsShowing.length > POST_SHOWING_CNT )
+					 $scope.postsShown.push($scope.postsShowing.shift());
+				if(AUTO_SCROLL_FLAG == true){
+					AUTO_SCROLL_FLAG = false;
+					clearInterval(AUTO_SCROLL_FLAG_LOCK);
+					AUTO_SCROLL_FLAG_LOCK = setTimeout(function(){AUTO_SCROLL_FLAG = true},5000);
+				}
+			} 
+	};// end of next
 	
 	(function getUntractedPost() {
         $http.get(api.board("juhui",$scope.currentPage)).success(function (data) {
@@ -33,7 +68,7 @@ function postsController($scope,$http,$timeout){
 			} 	
 			$timeout(getUntractedPost, 5000);
         });
-		$scope.currentPage +=1;
+		$scope.currentPage += 1;
     })();
 	
 	(function getPostsToShow(){
@@ -51,14 +86,14 @@ function postsController($scope,$http,$timeout){
 				});
 			});
 		}
-		$timeout(getPostsToShow, 1000);	
+		$timeout(getPostsToShow, 100);	
     })();
 	
 	(function updatePostsShowing() {
-		if($scope.postsToShow.length > 0){
+		if($scope.postsToShow.length > 0 && AUTO_SCROLL_FLAG){
 			$scope.postsShowing.push($scope.postsToShow.shift());
 		}
-		while($scope.postsShowing.length > 3) $scope.postsShown.push($scope.postsShowing.shift());
-		$timeout(updatePostsShowing, 2000);
+		while($scope.postsShowing.length > POST_SHOWING_CNT) $scope.postsShown.push($scope.postsShowing.shift());
+		$timeout(updatePostsShowing, AUTO_SCROLL_FREQUENCY);
     })();
 }
