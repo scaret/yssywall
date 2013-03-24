@@ -31,7 +31,7 @@ function postsController($scope,$http,$timeout){
 		if($scope.postsToShow.length > 0){
 			$scope.postsShowing.push($scope.postsToShow.shift());
 		}
-		while($scope.postsShowing.length > 5) $scope.postsShown.push($scope.postsShowing.shift());
+		while($scope.postsShowing.length > 3) $scope.postsShown.push($scope.postsShowing.shift());
 		$timeout(updatePostsShowing, 1000);
     })();
 }
