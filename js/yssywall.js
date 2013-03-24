@@ -16,10 +16,11 @@ function filterTag(text){
 	  }
 	  return '';
 }
-function toggleAutoScroll{
+function toggleAutoScroll(){
 	clearInterval(AUTO_SCROLL_FLAG_LOCK);
 	AUTO_SCROLL_FLAG = !AUTO_SCROLL_FLAG;
 }
+
 
 function postsController($scope,$http,$timeout){
 	$scope.postsShown=[];
