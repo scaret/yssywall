@@ -30,6 +30,7 @@ function postsController($scope,$http,$timeout){
 	$scope.currentPage = 500;
 	$scope.lastFileId = 0;
 	$scope.auto = "自动中";
+	$scope.board = "Juhui";
 	
 	$scope.toAuto = function(){
 		$scope.auto = "自动中";
@@ -71,7 +72,7 @@ function postsController($scope,$http,$timeout){
 	};// end of next
 	
 	(function getUntractedPost() {
-        $http.get(api.board("juhui",$scope.currentPage)).success(function (data) {
+        $http.get(api.board($scope.board,$scope.currentPage)).success(function (data) {
 			for(var i = 0 ; i < data.articles.length ; i++){
 				if(data["articles"][i]["mark"] != "   " && parseInt(data["articles"][i]["file_id"]) > $scope.lastFileId){
 					$scope.untractedPosts.push({

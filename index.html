@@ -22,17 +22,20 @@
 
   </head>
 
-  <body ng-app>
+  <body ng-app  ng-controller="postsController">
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <span class="brand" id="brand">饮水思源涂鸦墙</span>
+          <span class="brand active" id="brand">饮水思源涂鸦墙</span>
+		  <div class="pull-right" id = "info">
+              <span>在 <span id="board_name">{{board}}</span> 板发表帖子，被标记后即会上墙哦！</span>
+            </div>
         </div><!--end of container -->
       </div><!--end of navbar-inner-->
     </div><!-- end of navbar -->
 
 
-    <div class="container" ng-controller="postsController">
+    <div class="container">
 	
 		<!--墙主体部分。稍后会自动填充-->
 		<div class="row-fluid" id="main">
