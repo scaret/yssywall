@@ -12,7 +12,7 @@ yssywall
 
 管理员使用方法：
 
-将代码装到水源域下（http://bbs.sjtu.edu.cn），用一般浏览器打开（推荐chrome）
+将代码装到水源域下（ http://bbs.sjtu.edu.cn ），用一般浏览器打开（推荐chrome）
 或使用有跨域功能的浏览器（chromium下 --disable-web-security）
 
 如果初始页数或者板面不符，请进入设置（动作要快要不然被刷掉了！）。
