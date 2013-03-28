@@ -29,6 +29,7 @@
           <span class="brand active" id="brand">饮水思源涂鸦墙</span>
 		  <div class="pull-right" id = "info">
               <span>在 <span id="board_name">{{board}}</span> 板发表帖子，被标记后即会上墙哦！</span>
+			  <button role="button" class="btn btn-inverse" id="setting"  ng-click="opencloseSettings()"">设置</button>
             </div>
         </div><!--end of container -->
       </div><!--end of navbar-inner-->
@@ -48,10 +49,31 @@
 		</div><!--end of main-->
 		<div id="status">
 			<button class="btn btn-danger btn-large shown" ng-click="prev()" id="prev"><i class="icon-backward"></i>{{postsShown.length}}</button>
-			<button class="btn btn-large" ng-click="toggleAuto()" id="mode">{{auto}}</button>
+			
 			<button class="btn btn-success btn-large toShow" ng-click="next()" id="next">{{postsToShow.length}}<i class="icon-forward"></i></button>
     </div> <!--end of container -->
 
-
+	<!--设置菜单-->
+<div id="mySettings" class="{{settingClass}}">
+	<div class="modal">
+	  <div class="modal-header">
+		<button type="button" class="close" ng-click="opencloseSettings()">×</button>
+		<h3 id="myModalLabel">设置</h3>
+	  </div>
+	  <div class="modal-body">
+		<p>板面：<input type="text" ng-model="board" /></p>
+		<p>当前页：<input type="text" ng-model="currentPage" /></p>
+		<p>最大帖号： M.<input type="text" ng-model="lastFileId" />.A</p>
+		<p>取帖开关： <button class="btn btn-primary" ng-click="toggleAjax_Flag()">{{ajaxFlag}}</button></p>
+		<p>帖子切换： <button class="btn" ng-click="toggleAuto()" id="mode">{{auto}}</button></p>
+		<p>清空： <button class="btn btn-danger" ng-click="postsShown = []">清空已读</button> <button class="btn btn-success" ng-click="postsToShow = []">清空未读</button></p>
+	  </div>
+	  <div class="modal-footer">
+		<button class="btn btn-primary" ng-click="opencloseSettings()">关闭</button>
+	  </div>
+	</div>
+</div>
+	
+	
 </body>
 </html>

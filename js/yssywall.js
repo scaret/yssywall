@@ -9,6 +9,8 @@ var AUTO_SCROLL_FLAG = true;
 var AUTO_SCROLL_FLAG_LOCK = 0;
 var AUTO_SCROLL_FREQUENCY = 2000;
 var POST_SHOWING_CNT = 3;
+var AJAX_FLAG = true;
+
 function filterHTML(text){
 	  if (text) {
 		return text.
@@ -32,6 +34,8 @@ function postsController($scope,$http,$timeout){
 	$scope.lastFileId = 0;
 	$scope.auto = "自动中";
 	$scope.board = "Juhui";
+	$scope.settingClass = "hidden";
+	$scope.ajaxFlag = "已打开";
 	
 	$scope.toAuto = function(){
 		$scope.auto = "自动中";
@@ -42,6 +46,14 @@ function postsController($scope,$http,$timeout){
 		$scope.auto = "手动中";
 		AUTO_SCROLL_FLAG = false;
 		clearInterval(AUTO_SCROLL_FLAG_LOCK);		
+	}
+	$scope.toggleAjax_Flag = function(){
+		$scope.ajaxFlag = (AJAX_FLAG = !AJAX_FLAG)?"已打开":"已关闭";
+		return AJAX_FLAG;
+	}
+	
+	$scope.opencloseSettings = function(){
+		$scope.settingClass =$scope.settingClass == "hidden" ? "shown" :"hidden";
 	}
 	$scope.toggleAuto = function(){
 		(AUTO_SCROLL_FLAG?$scope.toManual:$scope.toAuto).call($scope);
@@ -73,6 +85,7 @@ function postsController($scope,$http,$timeout){
 	};// end of next
 	
 	(function getUntractedPost() {
+		if(!AJAX_FLAG)	{$timeout(getUntractedPost, 5000);return;}
         $http.get(api.board($scope.board,$scope.currentPage)).success(function (data) {
 			for(var i = 0 ; i < data.articles.length ; i++){
 				if(data["articles"][i]["mark"] != "   " && parseInt(data["articles"][i]["file_id"]) > $scope.lastFileId){
@@ -85,10 +98,11 @@ function postsController($scope,$http,$timeout){
 			} 	
 			$timeout(getUntractedPost, 5000);
         });
-		$scope.currentPage += 1;
+		$scope.currentPage = parseInt($scope.currentPage) + 1;
     })();
 	
 	(function getPostsToShow(){
+		if(!AJAX_FLAG)	{$timeout(getPostsToShow, 100);return;}
 		if($scope.untractedPosts.length > 0){
 			var thePost = $scope.untractedPosts.shift();
 			$http.get(api.article(thePost["board"],thePost["file"])).success(function (data) {

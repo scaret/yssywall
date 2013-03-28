@@ -72,3 +72,10 @@ body{
 	right:10px;
 	bottom:10px;
 }
+#setting{
+	margin-top:-10px;
+	margin-left:50px;
+}
+.hidden{
+	display:none;
+}
