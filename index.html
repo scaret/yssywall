@@ -22,7 +22,7 @@
 
   </head>
 
-  <body ng-app  ng-controller="postsController">
+  <body ng-app  ng-controller="postsController" onkeydown="keydownHandler(event)">
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -47,9 +47,9 @@
 			</div>
 		</div><!--end of main-->
 		<div id="status">
-			<button class="btn btn-danger btn-large shown" ng-click="prev()"><i class="icon-backward"></i>{{postsShown.length}}</button>
-			<button class="btn btn-large" ng-click="toggleAuto()">{{auto}}</button>
-			<button class="btn btn-success btn-large toShow" ng-click="next()">{{postsToShow.length}}<i class="icon-forward"></i></button>
+			<button class="btn btn-danger btn-large shown" ng-click="prev()" id="prev"><i class="icon-backward"></i>{{postsShown.length}}</button>
+			<button class="btn btn-large" ng-click="toggleAuto()" id="mode">{{auto}}</button>
+			<button class="btn btn-success btn-large toShow" ng-click="next()" id="next">{{postsToShow.length}}<i class="icon-forward"></i></button>
     </div> <!--end of container -->
 
 

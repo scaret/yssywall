@@ -9,10 +9,11 @@ var AUTO_SCROLL_FLAG = true;
 var AUTO_SCROLL_FLAG_LOCK = 0;
 var AUTO_SCROLL_FREQUENCY = 2000;
 var POST_SHOWING_CNT = 3;
-function filterTag(text){
+function filterHTML(text){
 	  if (text) {
 		return text.
-		replace(/<[\w\W]+?>/g,'');
+		replace(/<[\w\W]+?>/g,'').
+		replace(/&[a-zA-Z]+?;/g,'');
 	  }
 	  return '';
 }
@@ -91,13 +92,14 @@ function postsController($scope,$http,$timeout){
 		if($scope.untractedPosts.length > 0){
 			var thePost = $scope.untractedPosts.shift();
 			$http.get(api.article(thePost["board"],thePost["file"])).success(function (data) {
-				console.log(data);
+				var title = data["content"]["title"];
+				title = filterHTML(title);
 				var content = data["content_lines"][4]?data["content_lines"][4]:data["content_lines"][5];
-				content = filterTag(content);
+				content = filterHTML(content);
 				if(!content) return;
 				$scope.postsToShow.push({
 					author:data["content"]["author"],
-					title:data["content"]["title"],
+					title:title,
 					content:content
 				});
 			});
@@ -112,4 +114,18 @@ function postsController($scope,$http,$timeout){
 		while($scope.postsShowing.length > POST_SHOWING_CNT) $scope.postsShown.push($scope.postsShowing.shift());
 		$timeout(updatePostsShowing, AUTO_SCROLL_FREQUENCY);
     })();
+}
+
+function keydownHandler(e){
+	switch(e.keyCode){
+		case 37: //left
+			document.getElementById("prev").click();
+			break;
+		case 39: //right;
+			document.getElementById("next").click();
+			break;
+		case 77: //m
+			document.getElementById("mode").click();
+			break;
+	}
 }
