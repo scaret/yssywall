@@ -30,7 +30,7 @@ function postsController($scope,$http,$timeout){
 	$scope.postsShowing = [];
 	$scope.postsToShow = [];
 	$scope.untractedPosts = [];
-	$scope.currentPage = 600;
+	$scope.currentPage = 613;
 	$scope.lastFileId = 0;
 	$scope.auto = "自动中";
 	$scope.board = "Juhui";
