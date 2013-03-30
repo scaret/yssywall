@@ -86,7 +86,7 @@ function postsController($scope,$http,$timeout){
 	
 	(function getUntractedPost() {
 		if(!AJAX_FLAG)	{$timeout(getUntractedPost, 3000);return;}
-        $http.get(api.board($scope.board,$scope.currentPage)).success(function (data) {
+		$http.get(api.board($scope.board,$scope.currentPage)).success(function (data) {
 			for(var i = 0 ; i < data.articles.length ; i++){
 				if(data["articles"][i]["mark"] != "   " && parseInt(data["articles"][i]["file_id"]) > $scope.lastFileId){
 					$scope.untractedPosts.push({
@@ -96,8 +96,9 @@ function postsController($scope,$http,$timeout){
 					$scope.lastFileId =  parseInt(data["articles"][i]["file_id"]);
 				}
 			} 	
-			$timeout(getUntractedPost, 3000);
+			
         });
+		$timeout(getUntractedPost, 3000);
 		$scope.currentPage = parseInt($scope.currentPage) + 1;
     })();
 	
